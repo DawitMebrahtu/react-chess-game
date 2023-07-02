@@ -41,8 +41,8 @@ const pieceImages = {
 export default function Piece({piece: {type, color}}) {
   const pieceImg = pieceImages[type][color];
     return (
-    <div>
-      <img src={pieceImg} alt="" /> {' '}
+    <div className='piece-container'>
+      <img src={pieceImg} alt="" className='piece' /> {' '}
     </div>
   )
 }
