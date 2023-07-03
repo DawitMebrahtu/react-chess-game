@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDrag, DragPreviewImage } from 'react-dnd';
+
 import b_b from './assets/b_b.png';
 import b_w from './assets/b_w.png';
 import k_b from './assets/k_b.png';
@@ -38,11 +40,25 @@ const pieceImages = {
   },
 };
 
-export default function Piece({piece: {type, color}}) {
+export default function Piece({piece: {type, color}, position}) {
+
+  const [{isDragging}, drag, preview] = useDrag({
+    item: {type: 'piece', id: `${position}_${type}_${color}`},
+    collect: (monitor) => {
+      return {isDragging: !!monitor.isDragging()}
+    }
+  })
   const pieceImg = pieceImages[type][color];
     return (
-    <div className='piece-container'>
-      <img src={pieceImg} alt="" className='piece' /> {' '}
-    </div>
+      <>
+      <DragPreviewImage connect={preview} src={pieceImg} />
+      <div 
+        className='piece-container' 
+        ref={drag} 
+        style={{opacity: isDragging ? 0: 1}}
+      > 
+        <img src={pieceImg} alt="" className='piece' /> {' '}
+      </div>
+      </>
   )
 }
