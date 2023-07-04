@@ -36,9 +36,40 @@ export function move(from, to, promotion){
 }
 
 function updateGame(pendingPromotion){
+    const isGameOver = chess.game_over()
+    console.log(isGameOver)
+
     const newGame = {
         board: chess.board(),
-        pendingPromotion
+        pendingPromotion,
+        isGameOver,
+        result: isGameOver? getGameResult() : null
     }
     gameSubject.next(newGame)
+}
+
+function getGameResult(){
+    if (chess.in_checkmate()){
+        console.log('IS OVER')
+        const winner = chess.turn() === "w" ? 'BLACK' : 'WHITE'
+        return `CHECKMATE - WINNER - ${winner}`
+
+    }
+    else if (chess.in_draw()){
+        let reason = `50 - RULES- LAW`
+        if (chess.in_stalemate()){
+            reason = 'STALEMATE'
+        }
+        else if (chess.in_threefold_repitition()){
+            reason = 'REPITITION'
+        }
+        else if (chess.insufficient_material()){
+            reason = 'INSUFFICIENT MATERIAL'
+        }
+        return `DRAW - ${reason}`
+    }
+    else {
+        return `UNKNOWN REASON`
+    }
+
 }
