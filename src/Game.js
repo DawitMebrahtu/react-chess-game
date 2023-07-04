@@ -35,6 +35,10 @@ export function move(from, to, promotion){
     }
 }
 
+export function resetGame(){
+    chess.reset()
+    updateGame()
+}
 function updateGame(pendingPromotion){
     const isGameOver = chess.game_over()
     console.log(isGameOver)

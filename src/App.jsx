@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './App.css'
-import { gameSubject, initGame } from './Game'
+import { gameSubject, initGame, resetGame } from './Game'
 import Board from './Board'
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
       <div className='container'>
         {isGameOver && (
           <h2 className='vertical-text'>GAME OVER
-            <button>
+            <button onClick={resetGame}>
               <span className='vertical-text'>
                 NEW GAME   
               </span>
