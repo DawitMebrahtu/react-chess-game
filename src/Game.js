@@ -7,12 +7,15 @@ const chess = new Chess()
 export const gameSubject = new BehaviorSubject()
 
 export function initGame(){
+    const savedGame = localStorage.getItem('savedGame')
+    if (savedGame){
+        chess.load(savedGame)
+    }
     updateGame()
 }
 
 export function handleMove(from, to){
     const promotions = chess.moves({verbose: true}).filter(m => m.promotion)
-    //console.table(promotions)
     if (promotions.some(p => `${p.from}${p.to}` === `${from}${to}` )){
         const pendingPromotion = {from, to, color: promotions[0].color}
         updateGame(pendingPromotion)
@@ -41,7 +44,6 @@ export function resetGame(){
 }
 function updateGame(pendingPromotion){
     const isGameOver = chess.game_over()
-    console.log(isGameOver)
 
     const newGame = {
         board: chess.board(),
@@ -50,12 +52,12 @@ function updateGame(pendingPromotion){
         turn: chess.turn(),
         result: isGameOver? getGameResult() : null
     }
+    localStorage.setItem('savedGame', chess.fen())
     gameSubject.next(newGame)
 }
 
 function getGameResult(){
     if (chess.in_checkmate()){
-        console.log('IS OVER')
         const winner = chess.turn() === "w" ? 'BLACK' : 'WHITE'
         return `CHECKMATE - WINNER - ${winner}`
 
